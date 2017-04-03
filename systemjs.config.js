@@ -17,6 +17,7 @@
         'common',
         'compiler',
         'core',
+        'router',
         'http',
         'platform-browser',
         'platform-browser-dynamic',

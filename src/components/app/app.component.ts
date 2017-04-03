@@ -10,7 +10,7 @@ import {Component} from '@angular/core';
                 </div>
               </div>
       <div class="container body-content app-container">
-        <workout-runner></workout-runner>
+        <router-outlet></router-outlet>
       </div>`
 })
 
