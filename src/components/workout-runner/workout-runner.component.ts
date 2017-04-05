@@ -1,6 +1,7 @@
 import { WorkoutPlan, ExercisePlan, Exercise } from './model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { WorkoutHistoryTracker } from '../../services/workout-history-tracker';
 
 @Component({
     selector : 'workout-runner',
@@ -17,7 +18,7 @@ export class WorkoutRunnerComponent implements OnInit {
     exerciseTrackingInterval : number;
     workoutPaused : boolean;
 
-    constructor (private router : Router) {
+    constructor (private router : Router, private tracker: WorkoutHistoryTracker) {
         this.workoutPlan = this.buildWorkout();
         this.restExercise = new ExercisePlan(
             new Exercise("rest", "Relax!", "Relax a bit", "rest.png"),
@@ -29,10 +30,16 @@ export class WorkoutRunnerComponent implements OnInit {
         this.start();
     }
 
+    ngOnDestroy () {
+      this.tracker.endTracking(true);
+    }
+
     start () {
         this.workoutTimeRemaining = this.workoutPlan.totalWorkoutDuration();
         this.currentExerciseIndex = 0;
         this.startExercise(this.workoutPlan.exercises[this.currentExerciseIndex]);
+
+        this.tracker.startTracking();
     }
 
     startExercise (exercisePlan : ExercisePlan) {
@@ -60,6 +67,10 @@ export class WorkoutRunnerComponent implements OnInit {
         if (this.exerciseRunningDuration >= this.currentExercise.duration) {
           clearInterval(this.exerciseTrackingInterval);
 
+          if (this.currentExercise !== this.restExercise) {
+              this.tracker.exerciseComplete(this.workoutPlan.exercises[this.currentExerciseIndex]);
+          }
+
           let next : ExercisePlan = this.getNextExercise();
           if (next) {
             if (next !== this.restExercise) {
@@ -69,6 +80,7 @@ export class WorkoutRunnerComponent implements OnInit {
             this.startExercise(next);
           }
           else {
+            this.tracker.endTracking(true);
             this.router.navigate(['/finish']);
           }
 
@@ -103,7 +115,7 @@ export class WorkoutRunnerComponent implements OnInit {
       if (event.which == 80 || event.which == 112) {
         this.pauseResumeToggle();
       }
-    }
+    }   
 
     buildWorkout () : WorkoutPlan {
     let workout = new WorkoutPlan("7MinWorkout", "7 Minute Workout", 10, []);
