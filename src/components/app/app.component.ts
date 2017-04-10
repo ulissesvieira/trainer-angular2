@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
+import { Overlay } from 'angular2-modal';
 
 @Component({
     selector: 'trainer-app',
@@ -16,4 +17,8 @@ import { Component } from '@angular/core';
 
 export class TrainerAppComponent {
     name: string = 'World';
+    
+    constructor (overlay : Overlay, viewContainer : ViewContainerRef) {
+        overlay.defaultViewContainer = viewContainer;
+    }
 }

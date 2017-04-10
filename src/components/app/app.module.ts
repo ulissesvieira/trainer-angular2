@@ -8,11 +8,14 @@ import { FinishModule } from '../finish/finish.module';
 import { routing } from './app.routes';
 import { ServicesModule } from '../../services/service.module';
 import { HeaderComponent } from './header.component';
-import { WorkoutHistoryModule } from '../workout-history/workout-history.module'
+import { WorkoutHistoryModule } from '../workout-history/workout-history.module';
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 @NgModule({
     imports: [BrowserModule, WorkoutRunnerModule, StartModule,
-              FinishModule, routing, ServicesModule, WorkoutHistoryModule],
+              FinishModule, routing, ServicesModule, WorkoutHistoryModule,
+              ModalModule.forRoot(), BootstrapModalModule],
     declarations: [TrainerAppComponent, HeaderComponent],
     bootstrap: [TrainerAppComponent]
 })
