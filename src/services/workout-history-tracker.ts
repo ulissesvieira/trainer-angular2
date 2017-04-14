@@ -44,6 +44,9 @@ export class WorkoutHistoryTracker {
     }
 
     endTracking (completed : boolean) {
+        if (this == null && this.currentWorkoutLog == null)
+            return;
+            
         this.currentWorkoutLog.completed = completed;
         this.currentWorkoutLog.endedOn = new Date();
         

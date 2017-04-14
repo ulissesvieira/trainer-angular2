@@ -9,7 +9,7 @@ import { WorkoutHistoryTracker } from '../../services/workout-history-tracker';
     templateUrl: '/src/components/workout-runner/workout-runner.html'
 })
 
-export class WorkoutRunnerComponent implements OnInit {
+export class WorkoutRunnerComponent implements OnInit, OnDestroy {
     workoutPlan: WorkoutPlan;
     restExercise: ExercisePlan;
     workoutTimeRemaining: number;

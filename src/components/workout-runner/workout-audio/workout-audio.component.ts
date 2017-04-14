@@ -1,4 +1,4 @@
-import { Component, ViewChild, Inject, forwardRef } from '@angular/core';
+import { Component, ViewChild, Inject, forwardRef, AfterViewInit, OnDestroy } from '@angular/core';
 
 import { MyAudioDirective } from './my-audio.directive';
 import { WorkoutPlan, ExercisePlan,  ExerciseProgressEvent, ExerciseChangedEvent } from '../model'
@@ -9,7 +9,7 @@ import { WorkoutRunnerComponent } from '../workout-runner.component';
     templateUrl : '/src/components/workout-runner/workout-audio/workout-audio.html'
 })
 
-export class WorkoutAudioComponent {
+export class WorkoutAudioComponent implements AfterViewInit, OnDestroy {
     @ViewChild('ticks') private ticks : MyAudioDirective;
     @ViewChild('nextUp') private nextUp : MyAudioDirective;
     @ViewChild('nextUpExercise') private nextUpExercise : MyAudioDirective;
@@ -29,12 +29,22 @@ export class WorkoutAudioComponent {
         ];
     }
 
+    ngAfterViewInit () {
+        this.ticks.start();
+    }
+
+    ngOnDestroy () {
+        this.subscriptions.forEach((s) => s.unsubscribe());
+    }
+
     stop () {
         this.ticks.stop();
         this.nextUp.stop();
         this.nextUpExercise.stop();
         this.aboutToComplete.stop();
         this.nextUpExercise.stop();
+
+        console.log('stop');
     }
 
     resume () {
@@ -48,6 +58,8 @@ export class WorkoutAudioComponent {
             this.halfway.start();
         else if (this.aboutToComplete.currentTime > 0 && !this.aboutToComplete.playbackComplete)
             this.aboutToComplete.start();
+
+        console.log('resume');
     }
 
     onExerciseProgess (progress : ExerciseProgressEvent) {
@@ -57,6 +69,8 @@ export class WorkoutAudioComponent {
         else if (progress.timeRemaining == 3) {
             this.aboutToComplete.start();
         }
+
+        console.log('onExerciseProgess');
     }
 
     onExerciseChanged (state : ExerciseChangedEvent) {
@@ -66,5 +80,7 @@ export class WorkoutAudioComponent {
             setTimeout(() => this.nextUp.start(), 2000);
             setTimeout(() => this.nextUpExercise.start(), 3000);
         }
+
+        console.log('onExerciseChanged');
     }
 }

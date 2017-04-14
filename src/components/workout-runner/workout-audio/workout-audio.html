@@ -1,5 +1,5 @@
 <audio #ticks="MyAudio" loop scr="/static/audio/tick10s.mp3"></audio>
 <audio #nextUp="MyAudio" scr="/static/audio/nextup.mp3"></audio>
-<audio #nextUpExercise="MyAudio" [scr]="'/static/audio/' + nextupSound"></audio>
+<audio #nextUpExercise="MyAudio" [attr.scr]="'/static/audio/' + nextupSound"></audio>
 <audio #halfway="MyAudio" scr="/static/audio/15seconds.wav"></audio>
 <audio #aboutToComplete="MyAudio" scr="/static/audio/321.wav"></audio>
